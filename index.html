@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maddox Response Timer</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #2e2e2e;
+            color: #b0b0b0;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .timer {
+            display: grid;
+            grid-template-areas: ". days ." ". hours ." ". minutes ." ". seconds .";
+            font-weight: bold;
+            font-size: 8rem;
+            line-height: 1;
+            margin-bottom: 30px;
+        }
+
+        .timer span {
+            display: inline-block;
+        }
+
+        .days {
+            grid-area: days;
+            transform: rotate(-15deg);
+            color: #b0b0b0;
+            position: relative;
+            opacity: 0.8;
+        }
+
+        .days:after {
+            content: "🌑 Days";
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translateX(100%);
+            font-size: 1.2rem;
+            color: #b0b0b0;
+        }
+
+        .hours {
+            grid-area: hours;
+            transform: rotate(5deg);
+            color: #696969;
+            position: relative;
+            opacity: 0.8;
+        }
+
+        .hours:after {
+            content: "⏳ Hours";
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translateX(-200%);
+            font-size: 1.2rem;
+            color: #696969;
+        }
+
+        .minutes {
+            grid-area: minutes;
+            transform: rotate(-25deg);
+            color: #808080;
+            position: relative;
+            opacity: 0.8;
+        }
+
+        .minutes:after {
+            content: "🕰️ Minutes";
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translateX(100%);
+            font-size: 1.2rem;
+            color: #808080;
+        }
+
+        .seconds {
+            grid-area: seconds;
+            transform: rotate(15deg);
+            color: #b0b0b0;
+            position: relative;
+            opacity: 0.8;
+        }
+
+        .seconds:after {
+            content: "🔹 Seconds";
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translateX(-200%);
+            font-size: 1.2rem;
+            color: #b0b0b0;
+        }
+
+        .mission-container {
+            background-color: #333;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 50px;
+            width: 80%;
+            max-width: 500px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .countdown {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #b0b0b0;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            margin-top: 30px;
+            background-color: #8b8b8b;
+            color: #ffffff;
+            padding: 15px;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .cta-button:hover {
+            background-color: #5f5f5f;
+        }
+
+        .abstract-footer {
+            position: absolute;
+            bottom: 5%;
+            font-size: 1.5rem;
+            font-style: italic;
+            color: #b0b0b0;
+            text-shadow: 2px 2px #000;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="timer">
+        <div class="days">0</div>
+        <div class="hours">0</div>
+        <div class="minutes">0</div>
+        <div class="seconds">0</div>
+    </div>
+    <div class="abstract-footer">
+        Since Maddox last responded
+    </div>
+
+    <script>
+        // Set the last communication date
+        const lastCommunication = new Date('2024-12-18T08:55:00');
+        
+        // Set the countdown date for the Mission Man Formation
+        var missionCountDownDate = new Date("Dec 29, 2024 19:00:00 EST").getTime();
+
+        // Update the Maddox response timer
+        function updateMaddoxTimer() {
+            const now = new Date();
+            const diff = now - lastCommunication;
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.querySelector('.days').textContent = days;
+            document.querySelector('.hours').textContent = hours;
+            document.querySelector('.minutes').textContent = minutes;
+            document.querySelector('.seconds').textContent = seconds;
+        }
+
+        // Update the Mission countdown
+        function updateMissionCountdown() {
+            var now = new Date().getTime();
+            var distance = missionCountDownDate - now;
+
+            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("missionCountdown").innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+
+            if (distance < 0) {
+                clearInterval(missionTimer);
+                document.getElementById("missionCountdown").innerHTML = "Mission Starting Now...";
+            }
+        }
+
+        // Update both timers every second
+        updateMaddoxTimer();
+        setInterval(updateMaddoxTimer, 1000);
+        var missionTimer = setInterval(updateMissionCountdown, 1000);
+    </script>
+</body>
+</html>
